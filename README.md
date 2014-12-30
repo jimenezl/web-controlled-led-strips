@@ -50,7 +50,7 @@ Run the python file with your favourite method.
 For example:
 
 ```bash
-python ledController/raspi/ledStripController.py&
+python /var/www/ledController/raspi/ledStripController.py&
 ```
 
 
@@ -64,7 +64,7 @@ You can automate the changing of server/data.txt, which is what the python scrip
 You can play around with the web controller until your lights look like you want them to, save the contents of server/data.txt to server/dataMorning.txt, and have a script with:
 
 ```bash
-cp server/dataMorning.txt server/data.txt
+cp /var/www/ledController/server/dataMorning.txt /var/www/ledController/server/data.txt
 ```
 
 This simply copies the content of dataMorning.txt to data.txt. Then set up a cron job to run the script at 8:00AM, and you have yourself an awesome alarm (strobe would work great to wake you up :P).
