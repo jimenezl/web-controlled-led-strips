@@ -6,9 +6,9 @@ import os
 
 class ledStripController(object):
     def __init__(self):
-        self.RED_PIN = 11
-        self.BLUE_PIN = 12
-        self.GREEN_PIN = 13
+        self.RED_PIN = 11 #Change me to the pin hooked up to red
+        self.BLUE_PIN = 12 #Blue pin
+        self.GREEN_PIN = 13 #Green pin
 
         self.dataCheckFrequency = 1 #How often to check the data file, in Hertz
 

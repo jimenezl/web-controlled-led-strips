@@ -28,8 +28,7 @@ sudo git clone https://github.com/jimenezl/web-controlled-led-strips.git ledCont
 
 Run the above commands to pull the code to the default Apache web folder, or get the code some other way.
 Make sure it is running by going to http://localhost/ledController/server/ and confirming the controller interface loads.
-Playing around with the buttons and sliders should make the values change at http://localhost/ledController/server/displayData.php 
-If the values at displayData.php don't change, you might have to fiddle around with giving www-data permission:
+Playing around with the buttons and sliders should make the values change at http://localhost/ledController/server/displayData.php. If the values at displayData.php don't change, you might have to fiddle around with giving www-data permission:
 
 ```bash
 sudo chown -R www-data:www-data /var/www/ledController/server/
@@ -50,7 +49,7 @@ Run the python file with your favourite method.
 For example:
 
 ```bash
-python /var/www/ledController/raspi/ledStripController.py&
+sudo python /var/www/ledController/raspi/ledStripController.py&
 ```
 
 
@@ -64,7 +63,7 @@ You can automate the changing of server/data.txt, which is what the python scrip
 You can play around with the web controller until your lights look like you want them to, save the contents of server/data.txt to server/dataMorning.txt, and have a script with:
 
 ```bash
-cp /var/www/ledController/server/dataMorning.txt /var/www/ledController/server/data.txt
+sudo cp /var/www/ledController/server/dataMorning.txt /var/www/ledController/server/data.txt
 ```
 
 This simply copies the content of dataMorning.txt to data.txt. Then set up a cron job to run the script at 8:00AM, and you have yourself an awesome alarm (strobe would work great to wake you up :P).
