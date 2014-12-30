@@ -19,16 +19,22 @@ sudo apt-get install apache2 php5 libapache2-mod-php5 -y
 ```
 
 ###1. Get the Code
-Pull the code from the repo using your favourite method. For example:
+Pull the code from the repo using your favourite method. For example, if you have git installed on your Pi:
 
 ```bash
 cd /var/www/
-git clone https://github.com/jimenezl/web-controlled-led-strips.git ledController
+sudo git clone https://github.com/jimenezl/web-controlled-led-strips.git ledController
 ```
 
 Run the above commands to pull the code to the default Apache web folder, or get the code some other way.
 Make sure it is running by going to http://localhost/ledController/server/ and confirming the controller interface loads.
 Playing around with the buttons and sliders should make the values change at http://localhost/ledController/server/displayData.php 
+If the values at displayData.php don't change, you might have to fiddle around with giving www-data permission:
+
+```bash
+sudo chown -R www-data:www-data /var/www/ledController/server/
+sudo chmod -R 770 /var/www/ledController/server/
+```
 
 ###2. Hook up your LED strips
 
