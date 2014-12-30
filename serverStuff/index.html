@@ -1,0 +1,471 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LED Strip Controller</title>
+    <link rel="stylesheet" href="css/foundation.css" />
+    <script src="js/vendor/modernizr.js"></script>
+
+  </head>
+
+
+  <body>
+ 
+    <div class="row">
+    	<div class="small-1 columns">
+    		<h4><font color="red">Red</font></h4>
+    	</div>
+    	<div class="small-10 columns">
+    		<div class="range-slider round" data-slider data-options="display_selector: #sliderOutput1;" id="Slider1">
+    			<span class="range-slider-handle" role="slider" tabindex="0"></span>
+    			<span class="range-slider-active-segment"></span>
+
+    		</div>
+    	</div>
+    	<div class="small-1 columns">
+    		<span id="sliderOutput1"></span>
+    	</div>
+    </div>
+
+    <div class="row">
+    	<div class="small-1 columns">
+    		<h4><font color="Green">Green</font></h4>
+    	</div>
+    	<div class="small-10 columns">
+    		<div class="range-slider round" data-slider data-options="display_selector: #sliderOutput2;" id="Slider2">
+    			<span class="range-slider-handle" role="slider" tabindex="0"></span>
+    			<span class="range-slider-active-segment"></span>
+    		</div>
+    	</div>
+    	<div class="small-1 columns">
+    		<span id="sliderOutput2"></span>
+    	</div>
+    </div>
+
+    <div class="row">
+    	<div class="small-1 columns">
+    		<h4><font color="Blue">Blue</font></h4>
+    	</div>
+    	<div class="small-10 columns">
+    		<div class="range-slider round" data-slider data-options="display_selector: #sliderOutput3;" id="Slider3">
+    			<span class="range-slider-handle" role="slider" tabindex="0"></span>
+    			<span class="range-slider-active-segment"></span>
+    		</div>
+    	</div>
+    	<div class="small-1 columns">
+    		<span id="sliderOutput3"></span>
+    	</div>
+    </div>
+
+    <div class="row">
+	    <div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="fade1">Fade 1</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="fade2">Fade 2</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="fade3">Fade 3</div>
+		</div>
+	</div> 
+
+	<div class="row">
+	    <div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="fade4">Fade 4</div>
+		</div>
+		<div class="small-4 columns" >
+	    	<!-- <div role="button" tabindex="0" class="button round success" id="strobeButton">Toggle Strobe</div> -->
+	    	<span class="round large label">Strobe</span>
+			<div class="switch round large">
+			  <input id="strobeSwitch" type="checkbox" onclick="toggleStrobe()">
+			  <label for="strobeSwitch">Strobe</label>
+			</div> 
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="fade5">Fade 5</div>
+		</div>
+	</div> 
+
+	<div class="row">
+	    <div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="redButton">Red</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="greenButton">Green</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="blueButton">Blue</div>
+		</div>
+	</div> 
+
+	<div class="row">
+	    <div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="color1">Color 1</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="color2">Color 2</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="color3">Color 3</div>
+		</div>
+	</div> 
+
+	<div class="row">
+	    <div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="color4">Color 4</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button alert round" id="partyButton">PARTY</div>
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="color5">Color 5</div>
+		</div>
+	</div> 
+
+	<div class="row">
+	    <div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="resetButton">Reset</div>
+		</div>
+		<div class="small-4 columns">
+	    	<!-- <div role="button" tabindex="0" class="button round alert" id="powerButton">KILL</div> -->
+	    	<span class="round large alert label">POWER</span>
+			<div class="switch round large">
+			  <input id="powerSwitch" type="checkbox" onclick="togglePower()">
+			  <label for="powerSwitch">Power</label>
+			</div> 
+		</div>
+		<div class="small-4 columns">
+	    	<div role="button" tabindex="0" class="button round" id="randomButton">Random</div>
+		</div>
+	</div>
+
+	<div class="row">
+    	<div class="small-1 columns">
+    		<h4>Brightness</h4>
+    	</div>
+    	<div class="small-10 columns">
+    		<div class="range-slider round" data-slider data-options="display_selector: #sliderOutput4;" id="BrightnessSlider">
+    			<span class="range-slider-handle" role="slider" tabindex="0"></span>
+    			<span class="range-slider-active-segment"></span>
+    		</div>
+    	</div>
+    	<div class="small-1 columns">
+    		<span id="sliderOutput4"></span>
+    	</div>
+    </div>
+
+    <div class="row">
+    	<div class="small-1 columns">
+    		<h4>Fade Speed</h4>
+    	</div>
+    	<div class="small-10 columns">
+    		<div class="range-slider round" data-slider data-options="display_selector: #sliderOutput5;" id="FadeSpeedSlider">
+    			<span class="range-slider-handle" role="slider" tabindex="0"></span>
+    			<span class="range-slider-active-segment"></span>
+    		</div>
+    	</div>
+    	<div class="small-1 columns">
+    		<span id="sliderOutput5"></span>
+    	</div>
+    </div>
+
+    <div class="row">
+    	<div class="small-1 columns">
+    		<h4>Strobe Speed</h4>
+    	</div>
+    	<div class="small-10 columns">
+    		<div class="range-slider round" data-slider data-options="display_selector: #sliderOutput6;" id="StrobeSpeedSlider">
+    			<span class="range-slider-handle" role="slider" tabindex="0"></span>
+    			<span class="range-slider-active-segment"></span>
+    		</div>
+    	</div>
+    	<div class="small-1 columns">
+    		<span id="sliderOutput6"></span>
+    	</div>
+    </div>
+
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/foundation/foundation.slider.js"></script>
+    <script>
+		$(document).foundation();
+
+		initialSlidersUpdate();
+
+		//CHANGE THESE 5 COLORS FOR CUSTOM COLORS
+		var customColor1 = "1 1 1";
+		var customColor2 = "2 2 2";
+		var customColor3 = "3 3 3";
+		var customColor4 = "4 4 4";
+		var customColor5 = "5 5 5";
+
+		var sliderCount1 = 0;
+		var sliderCount2 = 0;
+		var sliderCount3 = 0;
+		var sliderCount4 = 0;
+		var sliderCount5 = 0;
+		var sliderCount6 = 0;
+
+		//For some reason, whenever the page is loaded, the slider change functions are called a number of times. 
+		//This is a workaround, since we don't want premature calls
+		var minSliderCount = 34;
+
+
+		$('#Slider1').on('change.fndtn.slider', function(){
+			sliderCount1++;
+  			console.log(sliderCount1);
+  			if ((sliderCount1 > minSliderCount) && (sliderCount1 % 3 == 0)){
+  				console.log("writing to text file: " + $('#Slider1').attr('data-slider'));
+  				writeColorData();
+  			}
+		});
+
+		$('#Slider2').on('change.fndtn.slider', function(){
+			sliderCount2++;
+  			console.log(sliderCount2);
+  			if ((sliderCount2 > minSliderCount) && (sliderCount2 % 3 == 0)){
+  				console.log("writing to text file: " + $('#Slider2').attr('data-slider'));
+  				writeColorData();
+  			}
+		});
+
+		$('#Slider3').on('change.fndtn.slider', function(){
+			sliderCount3++;
+  			console.log(sliderCount3);
+  			if ((sliderCount3 > minSliderCount) && (sliderCount3 % 3 == 0)){
+  				console.log("writing to text file: " + $('#Slider3').attr('data-slider'));
+  				writeColorData();
+  			}
+		});
+
+		$('#BrightnessSlider').on('change.fndtn.slider', function(){
+			sliderCount4++;
+  			console.log(sliderCount4);
+  			if ((sliderCount4 > minSliderCount) && (sliderCount4 % 3 == 0)){
+  				console.log("writing to text file: " + $('#BrightnessSlider').attr('data-slider'));
+  				writeBrightnessData();
+  			}
+		});
+
+		$('#FadeSpeedSlider').on('change.fndtn.slider', function(){
+			sliderCount5++;
+  			console.log(sliderCount5);
+  			if ((sliderCount5 > minSliderCount) && (sliderCount5 % 3 == 0)){
+  				console.log("writing to text file: " + $('#FadeSpeedSlider').attr('data-slider'));
+  				writeFadeSpeedData();
+  			}
+		});
+
+		$('#StrobeSpeedSlider').on('change.fndtn.slider', function(){
+			sliderCount6++;
+  			console.log(sliderCount6);
+  			if ((sliderCount6 > minSliderCount) && (sliderCount6 % 3 == 0)){
+  				console.log("writing to text file: " + $('#StrobeSpeedSlider').attr('data-slider'));
+  				writeStrobeSpeedData();
+  			}
+		});
+
+		//SETTING BUTTON CLICK FUNCTIONS
+
+		$("#fade1").click(function(){
+      		console.log("fade 1");
+      		writeCustomSetting(1);
+		});
+
+		$("#fade2").click(function(){
+      		console.log("fade 2");
+      		writeCustomSetting(2);
+		});
+
+		$("#fade3").click(function(){
+      		console.log("fade 3");
+      		writeCustomSetting(3);
+		});
+
+		$("#fade4").click(function(){
+      		console.log("fade 4");
+      		writeCustomSetting(4);
+		});
+
+		$("#fade5").click(function(){
+      		console.log("fade 5");
+      		writeCustomSetting(5);
+		});
+
+		// COLOR BUTTON CLICK FUNCTIONS
+
+		$("#color1").click(function(){
+      		console.log("color 1");
+      		writeCustomColor(customColor1);
+		});
+
+		$("#color2").click(function(){
+      		console.log("color 2");
+      		writeCustomColor(customColor2);
+		});
+
+		$("#color3").click(function(){
+      		console.log("color 3");
+      		writeCustomColor(customColor3);
+		});
+
+		$("#color4").click(function(){
+      		console.log("color 4");
+      		writeCustomColor(customColor4);
+		});
+
+		$("#color5").click(function(){
+      		console.log("color 5");
+      		writeCustomColor(customColor5);
+		});
+
+		$("#redButton").click(function(){
+      		console.log("red");
+      		writeCustomColor("100 0 0");
+		});
+
+		$("#greenButton").click(function(){
+      		console.log("green");
+      		writeCustomColor("0 100 0");
+		});
+
+		$("#blueButton").click(function(){
+      		console.log("blue");
+      		writeCustomColor("0 0 100");
+		});
+
+		$("#resetButton").click(function(){
+      		console.log("reset");
+      		writeToFile("sentReset", "sent");
+		});
+
+		$("#partyButton").click(function(){
+      		console.log("party");
+      		$('#BrightnessSlider').foundation('slider', 'set_value', 100);
+			$('#FadeSpeedSlider').foundation('slider', 'set_value', 75);
+			$('#StrobeSpeedSlider').foundation('slider', 'set_value', 50);
+			if($("#strobeSwitch").prop("checked")){
+				//pass
+			} else {
+				$("#strobeSwitch").prop("checked", true);
+				toggleStrobe();
+			}
+
+			//^^don't know why I have to do that
+			
+			writeFadeSpeedData();
+			writeBrightnessData();
+			writeStrobeSpeedData();
+
+			$(document).foundation();
+			$(document).foundation('slider', 'reflow');
+			//^^this doesn't work, but is necessary for vv to work :O
+			writeCustomSetting(5);
+			setTimeout(function(){window.location.reload();}, 2000);
+			
+
+		});
+
+		$("#randomButton").click(function(){
+      		console.log("random - not implemented yet");
+      		//TODO: implement
+		});
+
+		//POWER AND STROBE BUTTONS
+
+		// $("#powerButton").click(function(){
+  //     		console.log("power");
+  //     		writeToFile("sentPower", "sent");
+		// });
+
+		function togglePower(){
+			console.log("power");
+      		writeToFile("sentPower", "sent");
+		}
+
+		// $("#strobeButton").click(function(){
+  //     		console.log("strobe");
+  //     		writeToFile("sentStrobeToggle", "sent");
+		// });
+
+		function toggleStrobe(){
+			console.log("strobe");
+      		writeToFile("sentStrobeToggle", "sent");
+		}
+
+
+		function writeToFile(key, stringToWrite)
+			{
+				$.ajax({
+                        type: "POST",
+                        url: "receiving_file.php",
+                        data: key+ '=' + stringToWrite,
+                        success:function(data){
+                        }
+                });
+
+		}
+
+		function writeColorData(){
+			writeToFile("sentColor", $('#Slider1').attr('data-slider') + " " + $('#Slider2').attr('data-slider') + " " + $('#Slider3').attr('data-slider'));
+		}
+
+		function writeBrightnessData(){
+			writeToFile("sentBrightness", $('#BrightnessSlider').attr('data-slider'));
+		}
+
+		function writeFadeSpeedData(){
+			writeToFile("sentSpeed", $('#FadeSpeedSlider').attr('data-slider'));
+		}
+
+		function writeStrobeSpeedData(){
+			writeToFile("sentStrobe", $('#StrobeSpeedSlider').attr('data-slider'));
+		}
+
+		function writeCustomColor(customColor){
+			writeToFile("sentColor", customColor);
+			setTimeout(function(){window.location.reload();}, 1000);
+		}
+
+		function writeCustomSetting(settingNumber){
+			writeToFile("sentSetting", settingNumber);
+		}
+
+		function initialSlidersUpdate() {
+			var response = $.ajax({ type: "GET",   
+                        url: "displayData.php",   
+                        async: false
+                      }).responseText;
+			var currentSliderData = response.split(" ");
+        	
+        	$('#Slider1').foundation('slider', 'set_value', currentSliderData[1]);
+			$('#Slider2').foundation('slider', 'set_value', currentSliderData[2]);
+			$('#Slider3').foundation('slider', 'set_value', currentSliderData[3]);
+			$('#BrightnessSlider').foundation('slider', 'set_value', currentSliderData[7]);
+			$('#FadeSpeedSlider').foundation('slider', 'set_value', currentSliderData[9]);
+			$('#StrobeSpeedSlider').foundation('slider', 'set_value', currentSliderData[11]);
+
+			if (currentSliderData[12] == "on"){
+				$("#strobeSwitch").prop("checked", true);
+			} else {
+				$("#strobeSwitch").prop("checked", false);
+			}
+
+			if (currentSliderData[14] == "on"){
+				$("#powerSwitch").prop("checked", true);
+			} else {
+				$("#powerSwitch").prop("checked", false);
+			}
+
+			$(document).foundation();
+			$(document).foundation('slider', 'reflow');
+
+		}
+
+    </script>
+
+
+  </body>
+</html>
