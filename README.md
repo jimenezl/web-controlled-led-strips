@@ -52,9 +52,9 @@ This depends on your setup, but you'll need to choose 3 pins to use as output, o
 
 ###3. Modify Python File
 
-Open up the python file at /raspi/ledStripController.py and change the pin numbers on lines 9, 10, and 11 to the corresponding pin numbers used in your setup from step 2. 
+Open up the python file at /raspi/ledStripController.py and change the first three variables (RED_PIN, GREEN_PIN, and BLUE_PIN) to the corresponding pin numbers used in your setup from step 2. 
 
-Change line 13 to point to your server/displayData.php if needed.
+Change the fourth variable (DATA_URL) to point to your server/displayData.php if needed.
 
 Save and close the file. You might need to open it with root priveleges if it complains about not having permissions(ie. 'sudo nano /var/www/ledController/raspi/ledStripController.py')
 
