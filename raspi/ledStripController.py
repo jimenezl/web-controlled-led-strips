@@ -1,14 +1,16 @@
+#!/usr/bin/python
 import time
 import RPi.GPIO as GPIO
 import requests
 import os
-
 
 class ledStripController(object):
     def __init__(self):
         self.RED_PIN = 11 #Change me to the pin hooked up to red
         self.BLUE_PIN = 12 #Blue pin
         self.GREEN_PIN = 13 #Green pin
+
+        self.dataURL = "http://localhost/ledController/server/displayData.php" #change if different
 
         self.dataCheckFrequency = 1 #How often to check the data file, in Hertz
 
@@ -36,8 +38,8 @@ class ledStripController(object):
         self.pwmGreen.start(0)
         self.pwmBlue.start(0)
 
-        self.powerOn = true
-        self.strobeOn = false
+        self.powerOn = True
+        self.strobeOn = False
         self.strobeSpeed = 50
         self.fadeSpeed = 50
         self.brightness = 50
@@ -153,7 +155,32 @@ class ledStripController(object):
         """
         checks data file and updates local variables accordingly
         """
-        response = requests.get('http://YourWebsite.com/test.php')
+        dataRequest = requests.get(self.dataURL)
+        dataText = dataRequest.text
+
+        splitData = dataText.strip().split()
+
+        self.reportedRedLevel = splitData[1]
+        self.reportedGreenLevel = splitData[2]
+        self.reportedBlueLevel = splitData[3]
+
+        self.brightness = splitData[7]
+        self.fadeSpeed = splitData[9]
+        self.strobeSpeed = splitData[11]
+
+        if splitData[12] == "on":
+            self.strobeOn = True
+        else:
+            self.strobeOn = False
+
+        if splitData[14] == "on":
+            self.powerOn = True
+        else:
+            self.powerOn = False
+
+        if self.userSetting != splitData[5]:
+            self.userSetting = splitData[5]
+            self.fadeState = 0
 
     def fade1(self):
         if self.fadeState == 0:
