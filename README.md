@@ -3,7 +3,7 @@ Web controlled LED Strips on a Raspberry Pi
 
 What is this?
 ------------------------
-This repo contains all the code needed to be able to control your LED strips from a web page served by the Pi, with some minimal tweaking. At some point, screenshots and pictures will be uploaded. While this should work pretty much straight up out of the box, I can't make any guarantees.
+This repo contains all the code needed to be able to control your RGB LED strips from a web page served by the Pi, with some minimal tweaking. At some point, screenshots and pictures will be uploaded. While this should work pretty much straight up out of the box, I can't make any guarantees.
 
 Setup and Installation
 -------------------------

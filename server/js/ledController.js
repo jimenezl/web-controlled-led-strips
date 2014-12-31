@@ -16,13 +16,15 @@ var sliderCount4 = 0;
 var sliderCount5 = 0;
 var sliderCount6 = 0;
 
+//TODO: ^^ turn this into arrays and update rest of code
+
 //For some reason, whenever the page is loaded, the slider change functions are called a number of times. 
 //This is a workaround, since we don't want premature calls
 var minSliderCount = 34;
 
 
 $('#Slider1').on('change.fndtn.slider', function(){
-sliderCount1++;
+	sliderCount1++;
 	console.log(sliderCount1);
 	if ((sliderCount1 > minSliderCount) && (sliderCount1 % 3 == 0)){
 		console.log("writing to text file: " + $('#Slider1').attr('data-slider'));
@@ -31,7 +33,7 @@ sliderCount1++;
 });
 
 $('#Slider2').on('change.fndtn.slider', function(){
-sliderCount2++;
+	sliderCount2++;
 	console.log(sliderCount2);
 	if ((sliderCount2 > minSliderCount) && (sliderCount2 % 3 == 0)){
 		console.log("writing to text file: " + $('#Slider2').attr('data-slider'));
@@ -40,7 +42,7 @@ sliderCount2++;
 });
 
 $('#Slider3').on('change.fndtn.slider', function(){
-sliderCount3++;
+	sliderCount3++;
 	console.log(sliderCount3);
 	if ((sliderCount3 > minSliderCount) && (sliderCount3 % 3 == 0)){
 		console.log("writing to text file: " + $('#Slider3').attr('data-slider'));
@@ -49,7 +51,7 @@ sliderCount3++;
 });
 
 $('#BrightnessSlider').on('change.fndtn.slider', function(){
-sliderCount4++;
+	sliderCount4++;
 	console.log(sliderCount4);
 	if ((sliderCount4 > minSliderCount) && (sliderCount4 % 3 == 0)){
 		console.log("writing to text file: " + $('#BrightnessSlider').attr('data-slider'));
@@ -58,7 +60,7 @@ sliderCount4++;
 });
 
 $('#FadeSpeedSlider').on('change.fndtn.slider', function(){
-sliderCount5++;
+	sliderCount5++;
 	console.log(sliderCount5);
 	if ((sliderCount5 > minSliderCount) && (sliderCount5 % 3 == 0)){
 		console.log("writing to text file: " + $('#FadeSpeedSlider').attr('data-slider'));
@@ -67,7 +69,7 @@ sliderCount5++;
 });
 
 $('#StrobeSpeedSlider').on('change.fndtn.slider', function(){
-sliderCount6++;
+	sliderCount6++;
 	console.log(sliderCount6);
 	if ((sliderCount6 > minSliderCount) && (sliderCount6 % 3 == 0)){
 		console.log("writing to text file: " + $('#StrobeSpeedSlider').attr('data-slider'));
@@ -151,29 +153,8 @@ $("#resetButton").click(function(){
 
 $("#partyButton").click(function(){
 	console.log("party");
-	$('#BrightnessSlider').foundation('slider', 'set_value', 100);
-$('#FadeSpeedSlider').foundation('slider', 'set_value', 75);
-$('#StrobeSpeedSlider').foundation('slider', 'set_value', 50);
-if($("#strobeSwitch").prop("checked")){
-	//pass
-} else {
-	$("#strobeSwitch").prop("checked", true);
-	toggleStrobe();
-}
-
-//^^don't know why I have to do that
-
-writeFadeSpeedData();
-writeBrightnessData();
-writeStrobeSpeedData();
-
-$(document).foundation();
-$(document).foundation('slider', 'reflow');
-//^^this doesn't work, but is necessary for vv to work :O
-writeCustomSetting(5);
-setTimeout(function(){window.location.reload();}, 2000);
-
-
+	writeToFile("sentParty", "sent");
+	setTimeout(function(){window.location.reload();}, 2000);
 });
 
 $("#randomButton").click(function(){
@@ -183,91 +164,81 @@ $("#randomButton").click(function(){
 
 //POWER AND STROBE BUTTONS
 
-// $("#powerButton").click(function(){
-//     		console.log("power");
-//     		writeToFile("sentPower", "sent");
-// });
-
 function togglePower(){
-console.log("power");
+	console.log("power");
 	writeToFile("sentPower", "sent");
 }
 
-// $("#strobeButton").click(function(){
-//     		console.log("strobe");
-//     		writeToFile("sentStrobeToggle", "sent");
-// });
-
 function toggleStrobe(){
-console.log("strobe");
+	console.log("strobe");
 	writeToFile("sentStrobeToggle", "sent");
 }
 
-
+//Use this function to send commands to the server, where key is your command and stringToWrite is your value
 function writeToFile(key, stringToWrite)
 {
 	$.ajax({
-            type: "POST",
-            url: "receiving_file.php",
-            data: key+ '=' + stringToWrite,
-            success:function(data){
-            }
-    });
+		type: "POST",
+		url: "receiving_file.php",
+		data: key+ '=' + stringToWrite,
+		success:function(data){
+		}
+	});
 
 }
 
 function writeColorData(){
-writeToFile("sentColor", $('#Slider1').attr('data-slider') + " " + $('#Slider2').attr('data-slider') + " " + $('#Slider3').attr('data-slider'));
+	writeToFile("sentColor", $('#Slider1').attr('data-slider') + " " + $('#Slider2').attr('data-slider') + " " + $('#Slider3').attr('data-slider'));
 }
 
 function writeBrightnessData(){
-writeToFile("sentBrightness", $('#BrightnessSlider').attr('data-slider'));
+	writeToFile("sentBrightness", $('#BrightnessSlider').attr('data-slider'));
 }
 
 function writeFadeSpeedData(){
-writeToFile("sentSpeed", $('#FadeSpeedSlider').attr('data-slider'));
+	writeToFile("sentSpeed", $('#FadeSpeedSlider').attr('data-slider'));
 }
 
 function writeStrobeSpeedData(){
-writeToFile("sentStrobe", $('#StrobeSpeedSlider').attr('data-slider'));
+	writeToFile("sentStrobe", $('#StrobeSpeedSlider').attr('data-slider'));
 }
 
 function writeCustomColor(customColor){
-writeToFile("sentColor", customColor);
-setTimeout(function(){window.location.reload();}, 1000);
+	writeToFile("sentColor", customColor);
+	setTimeout(function(){window.location.reload();}, 1000);
 }
 
 function writeCustomSetting(settingNumber){
-writeToFile("sentSetting", settingNumber);
+	writeToFile("sentSetting", settingNumber);
 }
 
 function initialSlidersUpdate() {
-var response = $.ajax({ type: "GET",   
-            url: "displayData.php",   
-            async: false
-          }).responseText;
-var currentSliderData = response.split(" ");
+	var response = $.ajax({ type: "GET",   
+		url: "displayData.php",   
+		async: false
+	}).responseText;
+	var currentSliderData = response.split(" ");
 
-$('#Slider1').foundation('slider', 'set_value', currentSliderData[1]);
-$('#Slider2').foundation('slider', 'set_value', currentSliderData[2]);
-$('#Slider3').foundation('slider', 'set_value', currentSliderData[3]);
-$('#BrightnessSlider').foundation('slider', 'set_value', currentSliderData[7]);
-$('#FadeSpeedSlider').foundation('slider', 'set_value', currentSliderData[9]);
-$('#StrobeSpeedSlider').foundation('slider', 'set_value', currentSliderData[11]);
+	$('#Slider1').foundation('slider', 'set_value', currentSliderData[1]);
+	$('#Slider2').foundation('slider', 'set_value', currentSliderData[2]);
+	$('#Slider3').foundation('slider', 'set_value', currentSliderData[3]);
+	$('#BrightnessSlider').foundation('slider', 'set_value', currentSliderData[7]);
+	$('#FadeSpeedSlider').foundation('slider', 'set_value', currentSliderData[9]);
+	$('#StrobeSpeedSlider').foundation('slider', 'set_value', currentSliderData[11]);
 
-if (currentSliderData[12] == "on"){
-	$("#strobeSwitch").prop("checked", true);
-} else {
-	$("#strobeSwitch").prop("checked", false);
-}
+	if (currentSliderData[12] == "on"){
+		$("#strobeSwitch").prop("checked", true);
+	} else {
+		$("#strobeSwitch").prop("checked", false);
+	}
 
-if (currentSliderData[14] == "on"){
-	$("#powerSwitch").prop("checked", true);
-} else {
-	$("#powerSwitch").prop("checked", false);
-}
+	if (currentSliderData[14] == "on"){
+		$("#powerSwitch").prop("checked", true);
+	} else {
+		$("#powerSwitch").prop("checked", false);
+	}
 
-$(document).foundation();
-$(document).foundation('slider', 'reflow');
+	$(document).foundation();
+	$(document).foundation('slider', 'reflow');
 
 }

@@ -1,0 +1,1 @@
+color 23 75 100 setting 1 brightness 100 speed 75 strobe 50 on power off

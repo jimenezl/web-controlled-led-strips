@@ -7,6 +7,7 @@
     $strobeToggle = $_POST['sentStrobeToggle'];
     $togglePower = $_POST['sentPower'];
     $reset = $_POST['sentReset'];
+    $party = $_POST['sentParty'];
 
     $currentFileData = trim(file_get_contents('data.txt'));
 
@@ -57,6 +58,10 @@
     }
 
     file_put_contents('data.txt', implode(" ", $splitLine));
+
+    if (!empty($party)){
+        file_put_contents('data.txt', file_get_contents('partyData.txt'));
+    }
 
     if (!empty($reset)){
 		file_put_contents('data.txt', file_get_contents('defaultData.txt'));
