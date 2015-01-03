@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import time
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import requests
 import os
 import random
@@ -11,9 +11,9 @@ class ledStripController(object):
         Object for controlling LED Strips
         """
 
-        self.RED_PIN = 11 #Change me to the pin hooked up to red
-        self.BLUE_PIN = 12 #Blue pin
+        self.RED_PIN = 21 #Change me to the pin hooked up to red
         self.GREEN_PIN = 13 #Green pin
+        self.BLUE_PIN = 5 #Blue pin
 
         self.DATA_URL = "http://localhost/ledController/server/displayData.php" #change if different
 
@@ -68,11 +68,12 @@ class ledStripController(object):
         """
         Call this method once to start the LED strip controlling.
         """
-        while true:
+        while True:
             self.currentTime = time.time()
 
             if (self.currentTime - self.lastDataCheckTime) > (1.0/float(self.DATA_CHECK_FREQUENCY)):
                 self.checkDataFileAndUpdate()
+                self.lastDataCheckTime = self.currentTime
 
             if self.powerOn:
                 if self.userSetting == 0:
@@ -80,16 +81,16 @@ class ledStripController(object):
                     self.setBrightness(self.pwmGreen, float(self.reportedGreenLevel))
                     self.setBrightness(self.pwmRed, float(self.reportedRedLevel))
                 else:
-                    if (self.currentTime - self.fadeTime)<(10.0/float((self.fadeSpeed + 1.0))):
+                    if ((self.currentTime - self.fadeTime)<(10.0/float((self.fadeSpeed + 1.0)))):
                         pass
-                    elif (self.currentTime - self.fadeTime)>(10.0/float((self.fadeSpeed + 1.0))):
+                    elif ((self.currentTime - self.fadeTime)>(10.0/float((self.fadeSpeed + 1.0)))):
                         self.fade(self.userSetting)
                         self.turnAllOn()
                         self.fadeTime = self.currentTime
 
-                if strobeOn:
+                if self.strobeOn:
                     if (self.currentTime - self.strobeTime)<(.5/float(self.STROBE_FREQUENCY*(self.strobeSpeed + 1.0))):
-                        turnAllOn()
+                        self.turnAllOn()
                     elif (self.currentTime - self.strobeTime)>(1.0/float(self.STROBE_FREQUENCY*(self.strobeSpeed + 1.0))):
                         self.strobeTime = self.currentTime
                     else:
@@ -110,31 +111,33 @@ class ledStripController(object):
         sets brightness of an output pin by setting the pwm pin to finalBrightness*this.brightness/100 duty cycle
         """
         pwmColor.ChangeDutyCycle(finalBrightness*float(brightness)/100.0)
+        #print "setting brightness: " + str(self.redLevel) + " " + str(self.greenLevel) + " " + str(self.blueLevel)
 
     def turnAllOn(self):
         """
         sets brightness of all output pins to their set levels (ie. "on")
         """
-        self.setBrightness(pwmBlue,blueLevel)
-        self.setBrightness(pwmGreen,greenLevel)
-        self.setBrightness(pwmRed,redLevel)
+        self.setBrightness(self.pwmBlue,self.blueLevel)
+        self.setBrightness(self.pwmGreen,self.greenLevel)
+        self.setBrightness(self.pwmRed,self.redLevel)
+
 
     def fade(self, setting):
         """
         performs the fade as specified by the setting
         """
         if setting == 1:
-            fade1()
+            self.fade1()
         elif setting == 2:
-            fade2()
+            self.fade2()
         elif setting == 3:
-            fade3()
+            self.fade3()
         elif setting == 4:
-            fade4()
+            self.fade4()
         elif setting == 5:
-            fade5()
+            self.fade5()
         elif setting == 6:
-            fade6()
+            self.fade6()
 
     def incrementLevel(self, colorToIncrement):
         """
@@ -175,28 +178,33 @@ class ledStripController(object):
         dataText = dataRequest.text
 
         splitData = dataText.strip().split()
+        if len(splitData) == 15:
+            print "reading"
 
-        self.reportedRedLevel = splitData[1]
-        self.reportedGreenLevel = splitData[2]
-        self.reportedBlueLevel = splitData[3]
+            self.reportedRedLevel = float(splitData[1])
+            print "red level: " + str(self.reportedRedLevel)
+            self.reportedGreenLevel = float(splitData[2])
+            print "green level: " + str(self.reportedGreenLevel)
+            self.reportedBlueLevel = float(splitData[3])
+            print "blue level: " + str(self.reportedBlueLevel)
 
-        self.brightness = splitData[7]
-        self.fadeSpeed = splitData[9]
-        self.strobeSpeed = splitData[11]
+            self.brightness = float(splitData[7])
+            self.fadeSpeed = float(splitData[9])
+            self.strobeSpeed = float(splitData[11])
 
-        if splitData[12] == "on":
-            self.strobeOn = True
-        else:
-            self.strobeOn = False
+            if splitData[12] == "on":
+                self.strobeOn = True
+            else:
+                self.strobeOn = False
 
-        if splitData[14] == "on":
-            self.powerOn = True
-        else:
-            self.powerOn = False
+            if splitData[14] == "on":
+                self.powerOn = True
+            else:
+                self.powerOn = False
 
-        if self.userSetting != splitData[5]:
-            self.userSetting = splitData[5]
-            self.fadeState = 0
+            if self.userSetting != float(splitData[5]):
+                self.userSetting = float(splitData[5])
+                self.fadeState = 0
 
     ###    Fades start here
     ###      code for defining fade behavior
@@ -453,7 +461,8 @@ class ledStripController(object):
             if (((redError == 0)) and ((greenError == 0)) and ((blueError == 0))):
                 self.fadeState = 1
 
-
+controller = ledStripController()
+controller.runMainLoop()
 
 
 
