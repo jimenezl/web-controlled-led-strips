@@ -158,8 +158,8 @@ $("#partyButton").click(function(){
 });
 
 $("#randomButton").click(function(){
-	console.log("random - not implemented yet");
-	//TODO: implement
+	console.log("random");
+	writeCustomSetting(6);
 });
 
 //POWER AND STROBE BUTTONS

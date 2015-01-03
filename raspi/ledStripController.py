@@ -3,6 +3,7 @@ import time
 import RPi.GPIO as GPIO
 import requests
 import os
+import random
 
 class ledStripController(object):
     def __init__(self):
@@ -132,6 +133,8 @@ class ledStripController(object):
             fade4()
         elif setting == 5:
             fade5()
+        elif setting == 6:
+            fade6()
 
     def incrementLevel(self, colorToIncrement):
         """
@@ -370,6 +373,87 @@ class ledStripController(object):
                 self.decrementLevel("blue")
             else:
                 self.fadeState = 1
+
+    #Random fade
+    def fade6(self):
+        """
+        Fades in between 3 randomly chosen colors
+        """
+
+        randomColor1 = [0,0,0] # First element is level of red (0-100), second is green, third is blue
+        randomColor2 = [0,0,0]
+        randomColor3 = [0,0,0]
+        #TODO: make a color class and replace these ^^
+
+        minColorLevel = 0
+        maxColorLevel = 20
+
+        if self.fadeState == 0:
+            #generating and assigning random colors
+            randomColor1[0] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP #we want the range to be between 50 and 100, in increments of INCREMENT_STEP so we can use decrementLevel and incrementLevel
+            randomColor1[1] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+            randomColor1[2] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+
+            randomColor2[0] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+            randomColor2[1] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+            randomColor2[2] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+
+            randomColor3[0] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+            randomColor3[1] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+            randomColor3[2] = random.randint(minColorLevel,maxColorLevel) * self.INCREMENT_STEP
+
+            self.redLevel = randomColor1[0]
+            self.greenLevel = randomColor1[1]
+            self.blueLevel = randomColor1[2]
+
+            self.fadeState = 1
+
+        if self.fadeState == 1:
+            redError = self.redLevel - randomColor2[0]
+            greenError = self.greenLevel - randomColor2[1]
+            blueError = self.blueLevel - randomColor2[2]
+
+            if ((redError != 0)):
+                self.changeLevel("red", (-1*redError/abs(redError))*self.INCREMENT_STEP)
+            if ((greenError != 0)):
+                self.changeLevel("green", (-1*greenError/abs(greenError))*self.INCREMENT_STEP)
+            if ((blueError != 0)):
+                self.changeLevel("blue", (-1*blueError/abs(blueError))*self.INCREMENT_STEP)
+
+            if (((redError == 0)) and ((greenError == 0)) and ((blueError == 0))):
+                self.fadeState = 2
+
+        if self.fadeState == 2:
+            redError = self.redLevel - randomColor3[0]
+            greenError = self.greenLevel - randomColor3[1]
+            blueError = self.blueLevel - randomColor3[2]
+
+            if ((redError != 0)):
+                self.changeLevel("red", (-1*redError/abs(redError))*self.INCREMENT_STEP)
+            if ((greenError != 0)):
+                self.changeLevel("green", (-1*greenError/abs(greenError))*self.INCREMENT_STEP)
+            if ((blueError != 0)):
+                self.changeLevel("blue", (-1*blueError/abs(blueError))*self.INCREMENT_STEP)
+
+            if (((redError == 0)) and ((greenError == 0)) and ((blueError == 0))):
+                self.fadeState = 3
+
+        if self.fadeState == 3:
+            redError = self.redLevel - randomColor1[0]
+            greenError = self.greenLevel - randomColor1[1]
+            blueError = self.blueLevel - randomColor1[2]
+
+            if ((redError != 0)):
+                self.changeLevel("red", (-1*redError/abs(redError))*self.INCREMENT_STEP)
+            if ((greenError != 0)):
+                self.changeLevel("green", (-1*greenError/abs(greenError))*self.INCREMENT_STEP)
+            if ((blueError != 0)):
+                self.changeLevel("blue", (-1*blueError/abs(blueError))*self.INCREMENT_STEP)
+
+            if (((redError == 0)) and ((greenError == 0)) and ((blueError == 0))):
+                self.fadeState = 1
+
+
 
 
 
