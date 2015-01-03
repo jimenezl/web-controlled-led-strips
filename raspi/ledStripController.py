@@ -1,9 +1,10 @@
 #!/usr/bin/python
 import time
-import RPi.GPIO as GPIO
+##import RPi.GPIO as GPIO
 #import requests
 import os
 import random
+import pigpio
 
 class ledStripController(object):
     def __init__(self):
@@ -11,9 +12,9 @@ class ledStripController(object):
         Object for controlling LED Strips
         """
 
-        self.RED_PIN = 21 #Change me to the pin hooked up to red
-        self.GREEN_PIN = 13 #Green pin
-        self.BLUE_PIN = 5 #Blue pin
+        self.RED_PIN = 9 #Change me to the pin hooked up to red
+        self.GREEN_PIN = 27 #Green pin
+        self.BLUE_PIN = 3 #Blue pin
 
         self.DATA_ADDRESS = '/var/www/ledController/server/data.txt' #change if different
 
@@ -26,20 +27,34 @@ class ledStripController(object):
 
         self.INCREMENT_STEP = 5 #increment step for fades
 
-        GPIO.setmode(GPIO.BOARD) #change if necessary
+##        GPIO.setmode(GPIO.BOARD) #change if necessary
 
-        #Setting up pins as output pins
-        GPIO.setup(self.RED_PIN, GPIO.OUT)
-        GPIO.setup(self.BLUE_PIN, GPIO.OUT)
-        GPIO.setup(self.GREEN_PIN, GPIO.OUT)
+##        #Setting up pins as output pins
+##        GPIO.setup(self.RED_PIN, GPIO.OUT)
+##        GPIO.setup(self.BLUE_PIN, GPIO.OUT)
+##        GPIO.setup(self.GREEN_PIN, GPIO.OUT)
 
-        self.pwmRed = GPIO.PWM(self.RED_PIN, self.ON_FREQUENCY)
-        self.pwmBlue = GPIO.PWM(self.BLUE_PIN, self.ON_FREQUENCY)
-        self.pwmGreen = GPIO.PWM(self.GREEN_PIN, self.ON_FREQUENCY)
+##        self.pwmRed = GPIO.PWM(self.RED_PIN, self.ON_FREQUENCY)
+##        self.pwmBlue = GPIO.PWM(self.BLUE_PIN, self.ON_FREQUENCY)
+##        self.pwmGreen = GPIO.PWM(self.GREEN_PIN, self.ON_FREQUENCY)
+##
+##        self.pwmRed.start(0) #starting off at 0 duty cycle
+##        self.pwmGreen.start(0)
+##        self.pwmBlue.start(0)
 
-        self.pwmRed.start(0) #starting off at 0 duty cycle
-        self.pwmGreen.start(0)
-        self.pwmBlue.start(0)
+##        pi.set_PWM_frequency(self.RED_PIN, self.ON_FREQUENCY)
+##        pi.set_PWM_frequency(self.GREEN_PIN, self.ON_FREQUENCY)
+##        pi.set_PWM_frequency(self.BLUE_PIN, self.ON_FREQUENCY)
+
+        pi = pigpio.pi()
+
+        pi.set_PWM_range(self.RED_PIN, 100)
+        pi.set_PWM_range(self.GREEN_PIN, 100)
+        pi.set_PWM_range(self.BLUE_PIN, 100)
+
+        pi.set_PWM_dutycycle(self.RED_PIN, 0)
+        pi.set_PWM_dutycycle(self.GREEN_PIN, 0)
+        pi.set_PWM_dutycycle(self.BLUE_PIN, 0)
 
         self.powerOn = True
         self.strobeOn = False
@@ -80,9 +95,9 @@ class ledStripController(object):
 
             if self.powerOn:
                 if self.userSetting == 0:
-                    self.setBrightness(self.pwmBlue, float(self.reportedBlueLevel))
-                    self.setBrightness(self.pwmGreen, float(self.reportedGreenLevel))
-                    self.setBrightness(self.pwmRed, float(self.reportedRedLevel))
+                    self.setBrightness(self.BLUE_PIN, float(self.reportedBlueLevel))
+                    self.setBrightness(self.GREEN_PIN, float(self.reportedGreenLevel))
+                    self.setBrightness(self.RED_PIN, float(self.reportedRedLevel))
                 else:
                     if ((self.currentTime - self.fadeTime)<(10.0/float((self.fadeSpeed + 1.0)))):
                         pass
@@ -101,28 +116,39 @@ class ledStripController(object):
             else:
                 self.turnAllOff()
 
+    def decimalToEightBit(self, decimal):
+        return float(decimal)*255.0/100.0
+
     def turnAllOff(self):
         """
         turn off all LED's by setting duty cycle to 0
         """
-        self.pwmRed.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
-        self.pwmGreen.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
-        self.pwmBlue.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
+##        self.pwmRed.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
+##        self.pwmGreen.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
+##        self.pwmBlue.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
 
-    def setBrightness(self, pwmColor, finalBrightness):
+        pi.set_PWM_dutycycle(self.RED_PIN, self.OFF_DUTY_CYCLE)
+        pi.set_PWM_dutycycle(self.GREEN_PIN, self.OFF_DUTY_CYCLE)
+        pi.set_PWM_dutycycle(self.BLUE_PIN, self.OFF_DUTY_CYCLE)
+
+    def setBrightness(self, colorPin, finalBrightness):
         """
         sets brightness of an output pin by setting the pwm pin to finalBrightness*this.brightness/100 duty cycle
         """
-        pwmColor.ChangeDutyCycle(finalBrightness*float(self.brightness)/100.0)
+        pi.set_PWM_dutycycle(colorPin, (finalBrightness*float(self.brightness)/100.0))
+##        pwmColor.ChangeDutyCycle(finalBrightness*float(self.brightness)/100.0)
         #print "setting brightness: " + str(self.redLevel) + " " + str(self.greenLevel) + " " + str(self.blueLevel)
 
     def turnAllOn(self):
         """
         sets brightness of all output pins to their set levels (ie. "on")
         """
-        self.setBrightness(self.pwmBlue,self.blueLevel)
-        self.setBrightness(self.pwmGreen,self.greenLevel)
-        self.setBrightness(self.pwmRed,self.redLevel)
+##        self.setBrightness(self.pwmBlue,self.blueLevel)
+##        self.setBrightness(self.pwmGreen,self.greenLevel)
+##        self.setBrightness(self.pwmRed,self.redLevel)
+        self.setBrightness(self.BLUE_PIN,self.blueLevel)
+        self.setBrightness(self.GREEN_PIN,self.greenLevel)
+        self.setBrightness(self.RED_PIN,self.redLevel)
 
 
     def fade(self, setting):
@@ -182,36 +208,36 @@ class ledStripController(object):
 
 	self.dataFile.seek(0)
 	newDataLine = self.dataFile.readline()
-	
+
 	if self.oldDataLine != newDataLine:
 		self.oldDataLine = newDataLine
 	        splitData = newDataLine.strip().split()
 	        if len(splitData) == 15:
 	            #print "reading: "
 		    #print splitData
-	
+
 	            self.reportedRedLevel = float(splitData[1])
 	            self.reportedGreenLevel = float(splitData[2])
 	            self.reportedBlueLevel = float(splitData[3])
-	
+
 		    #print "red level: " + str(self.reportedRedLevel)
 	            #print "green level: " + str(self.reportedGreenLevel)
 	            #print "blue level: " + str(self.reportedBlueLevel)
-	
+
 	            self.brightness = float(splitData[7])
 	            self.fadeSpeed = float(splitData[9])
 	            self.strobeSpeed = float(splitData[11])
-	
+
 	            if splitData[12] == "on":
 	                self.strobeOn = True
 	            else:
 	                self.strobeOn = False
-	
+
 	            if splitData[14] == "on":
 	                self.powerOn = True
 	            else:
 	                self.powerOn = False
-	
+
 	            if self.userSetting != float(splitData[5]):
 	                self.userSetting = float(splitData[5])
 			#print "user setting: " + str(self.userSetting)
