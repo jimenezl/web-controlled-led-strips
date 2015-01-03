@@ -10,11 +10,10 @@
     $party = $_POST['sentParty'];
 
     $fileContents = file_get_contents('data.txt');
+    $trimmedFileContents = trim($fileContents);
+    $splitLine = explode(" ", $trimmedFileContents);
 
-    if ($fileContents !== FALSE){
-        $trimmedFileContents = trim($fileContents);
-
-        $splitLine = explode(" ", $trimmedFileContents);
+    if (count($splitLine) == 15){
 
         if (!empty($togglePower)){
         	if ($splitLine[14] === "on"){
@@ -65,9 +64,9 @@
         if (!empty($party)){
             file_put_contents('data.txt', file_get_contents('partyData.txt'));
         }
-
-        if (!empty($reset)){
-    		file_put_contents('data.txt', file_get_contents('defaultData.txt'));
-        }
     }
+    if (!empty($reset)){
+	file_put_contents('data.txt', file_get_contents('defaultData.txt'));
+    }
+    
     ?>
