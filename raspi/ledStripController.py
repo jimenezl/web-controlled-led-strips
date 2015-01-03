@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import time
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import requests
 import os
 import random
@@ -102,15 +102,15 @@ class ledStripController(object):
         """
         turn off all LED's by setting duty cycle to 0
         """
-        self.pwmRed.ChangeDutyCycle(OFF_DUTY_CYCLE)
-        self.pwmGreen.ChangeDutyCycle(OFF_DUTY_CYCLE)
-        self.pwmBlue.ChangeDutyCycle(OFF_DUTY_CYCLE)
+        self.pwmRed.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
+        self.pwmGreen.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
+        self.pwmBlue.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
 
     def setBrightness(self, pwmColor, finalBrightness):
         """
         sets brightness of an output pin by setting the pwm pin to finalBrightness*this.brightness/100 duty cycle
         """
-        pwmColor.ChangeDutyCycle(finalBrightness*float(brightness)/100.0)
+        pwmColor.ChangeDutyCycle(finalBrightness*float(self.brightness)/100.0)
         #print "setting brightness: " + str(self.redLevel) + " " + str(self.greenLevel) + " " + str(self.blueLevel)
 
     def turnAllOn(self):
