@@ -46,7 +46,7 @@ class ledStripController(object):
 ##        pi.set_PWM_frequency(self.GREEN_PIN, self.ON_FREQUENCY)
 ##        pi.set_PWM_frequency(self.BLUE_PIN, self.ON_FREQUENCY)
 
-        pi = pigpio.pi()
+        self.pi = pigpio.pi()
 
         pi.set_PWM_range(self.RED_PIN, 100)
         pi.set_PWM_range(self.GREEN_PIN, 100)
@@ -127,15 +127,15 @@ class ledStripController(object):
 ##        self.pwmGreen.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
 ##        self.pwmBlue.ChangeDutyCycle(self.OFF_DUTY_CYCLE)
 
-        pi.set_PWM_dutycycle(self.RED_PIN, self.OFF_DUTY_CYCLE)
-        pi.set_PWM_dutycycle(self.GREEN_PIN, self.OFF_DUTY_CYCLE)
-        pi.set_PWM_dutycycle(self.BLUE_PIN, self.OFF_DUTY_CYCLE)
+        self.pi.set_PWM_dutycycle(self.RED_PIN, self.OFF_DUTY_CYCLE)
+        self.pi.set_PWM_dutycycle(self.GREEN_PIN, self.OFF_DUTY_CYCLE)
+        self.pi.set_PWM_dutycycle(self.BLUE_PIN, self.OFF_DUTY_CYCLE)
 
     def setBrightness(self, colorPin, finalBrightness):
         """
         sets brightness of an output pin by setting the pwm pin to finalBrightness*this.brightness/100 duty cycle
         """
-        pi.set_PWM_dutycycle(colorPin, (finalBrightness*float(self.brightness)/100.0))
+        self.pi.set_PWM_dutycycle(colorPin, (finalBrightness*float(self.brightness)/100.0))
 ##        pwmColor.ChangeDutyCycle(finalBrightness*float(self.brightness)/100.0)
         #print "setting brightness: " + str(self.redLevel) + " " + str(self.greenLevel) + " " + str(self.blueLevel)
 
