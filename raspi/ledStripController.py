@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import time
 import RPi.GPIO as GPIO
-import requests
+#import requests
 import os
 import random
 
@@ -15,11 +15,11 @@ class ledStripController(object):
         self.GREEN_PIN = 13 #Green pin
         self.BLUE_PIN = 5 #Blue pin
 
-        self.DATA_URL = "http://localhost/ledController/server/displayData.php" #change if different
+        self.DATA_ADDRESS = '/var/www/ledController/server/data.txt' #change if different
 
         self.DATA_CHECK_FREQUENCY = 1 #How often to check the data file, in Hertz
 
-        self.ON_FREQUENCY = 50 #in Hertz;
+        self.ON_FREQUENCY = 100 #in Hertz;
         self.STROBE_FREQUENCY = .5 #baseline strobe frequency in Hz (if strobe slider was set to 0);
 
         self.OFF_DUTY_CYCLE = 0
@@ -61,6 +61,9 @@ class ledStripController(object):
         self.lastDataCheckTime = time.time()
 
         self.fadeState = 0
+
+	self.dataFile = open(self.DATA_ADDRESS, 'r')
+	self.oldDataLine = ""
 
         self.checkDataFileAndUpdate()
 
@@ -174,36 +177,44 @@ class ledStripController(object):
         """
         checks data file and updates local variables accordingly
         """
-        dataRequest = requests.get(self.DATA_URL)
-        dataText = dataRequest.text
+        #dataRequest = requests.get(self.DATA_URL)
+        #dataText = dataRequest.text
 
-        splitData = dataText.strip().split()
-        if len(splitData) == 15:
-            print "reading"
-
-            self.reportedRedLevel = float(splitData[1])
-            print "red level: " + str(self.reportedRedLevel)
-            self.reportedGreenLevel = float(splitData[2])
-            print "green level: " + str(self.reportedGreenLevel)
-            self.reportedBlueLevel = float(splitData[3])
-            print "blue level: " + str(self.reportedBlueLevel)
-
-            self.brightness = float(splitData[7])
-            self.fadeSpeed = float(splitData[9])
-            self.strobeSpeed = float(splitData[11])
-
-            if splitData[12] == "on":
-                self.strobeOn = True
-            else:
-                self.strobeOn = False
-
-            if splitData[14] == "on":
-                self.powerOn = True
-            else:
-                self.powerOn = False
-
-            if self.userSetting != float(splitData[5]):
-                self.userSetting = float(splitData[5])
+	self.dataFile.seek(0)
+	newDataLine = self.dataFile.readline()
+	
+	if self.oldDataLine != newDataLine:
+		self.oldDataLine = newDataLine
+	        splitData = newDataLine.strip().split()
+	        if len(splitData) == 15:
+	            #print "reading: "
+		    #print splitData
+	
+	            self.reportedRedLevel = float(splitData[1])
+	            self.reportedGreenLevel = float(splitData[2])
+	            self.reportedBlueLevel = float(splitData[3])
+	
+		    #print "red level: " + str(self.reportedRedLevel)
+	            #print "green level: " + str(self.reportedGreenLevel)
+	            #print "blue level: " + str(self.reportedBlueLevel)
+	
+	            self.brightness = float(splitData[7])
+	            self.fadeSpeed = float(splitData[9])
+	            self.strobeSpeed = float(splitData[11])
+	
+	            if splitData[12] == "on":
+	                self.strobeOn = True
+	            else:
+	                self.strobeOn = False
+	
+	            if splitData[14] == "on":
+	                self.powerOn = True
+	            else:
+	                self.powerOn = False
+	
+	            if self.userSetting != float(splitData[5]):
+	                self.userSetting = float(splitData[5])
+			#print "user setting: " + str(self.userSetting)
                 self.fadeState = 0
 
     ###    Fades start here
