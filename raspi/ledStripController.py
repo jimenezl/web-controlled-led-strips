@@ -48,13 +48,13 @@ class ledStripController(object):
 
         self.pi = pigpio.pi()
 
-        pi.set_PWM_range(self.RED_PIN, 100)
-        pi.set_PWM_range(self.GREEN_PIN, 100)
-        pi.set_PWM_range(self.BLUE_PIN, 100)
+        self.pi.set_PWM_range(self.RED_PIN, 100)
+        self.pi.set_PWM_range(self.GREEN_PIN, 100)
+        self.pi.set_PWM_range(self.BLUE_PIN, 100)
 
-        pi.set_PWM_dutycycle(self.RED_PIN, 0)
-        pi.set_PWM_dutycycle(self.GREEN_PIN, 0)
-        pi.set_PWM_dutycycle(self.BLUE_PIN, 0)
+        self.pi.set_PWM_dutycycle(self.RED_PIN, 0)
+        self.pi.set_PWM_dutycycle(self.GREEN_PIN, 0)
+        self.pi.set_PWM_dutycycle(self.BLUE_PIN, 0)
 
         self.powerOn = True
         self.strobeOn = False
