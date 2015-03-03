@@ -21,7 +21,7 @@ class ledStripController(object):
         self.DATA_CHECK_FREQUENCY = 1 #How often to check the data file, in Hertz
 
         self.ON_FREQUENCY = 100 #in Hertz;
-        self.STROBE_FREQUENCY = 1.5 #baseline strobe frequency in Hz (if strobe slider was set to 0);
+        self.STROBE_FREQUENCY = 0.5 #baseline strobe frequency in Hz (if strobe slider was set to 0);
 
         self.OFF_DUTY_CYCLE = 0
 
@@ -99,9 +99,9 @@ class ledStripController(object):
                     self.setBrightness(self.GREEN_PIN, float(self.reportedGreenLevel))
                     self.setBrightness(self.RED_PIN, float(self.reportedRedLevel))
                 else:
-                    if ((self.currentTime - self.fadeTime)<(10.0/float((self.fadeSpeed + 1.0)))):
+                    if ((self.currentTime - self.fadeTime)<(4.0/float((self.fadeSpeed + 1.0)))):
                         pass
-                    elif ((self.currentTime - self.fadeTime)>(10.0/float((self.fadeSpeed + 1.0)))):
+                    elif ((self.currentTime - self.fadeTime)>(4.0/float((self.fadeSpeed + 1.0)))):
                         self.fade(self.userSetting)
                         self.turnAllOn()
                         self.fadeTime = self.currentTime
