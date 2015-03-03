@@ -21,7 +21,7 @@ class ledStripController(object):
         self.DATA_CHECK_FREQUENCY = 1 #How often to check the data file, in Hertz
 
         self.ON_FREQUENCY = 100 #in Hertz;
-        self.STROBE_FREQUENCY = .5 #baseline strobe frequency in Hz (if strobe slider was set to 0);
+        self.STROBE_FREQUENCY = 1.5 #baseline strobe frequency in Hz (if strobe slider was set to 0);
 
         self.OFF_DUTY_CYCLE = 0
 
@@ -116,10 +116,13 @@ class ledStripController(object):
             else:
                 self.turnAllOff()
 
-            if not(self.strobeOn) or self.fadeState==0:
-                time.sleep(.5)
-            else:
+            if self.strobeOn:
+                time.sleep(.025)
+            elif self.fadeState != 0:
                 time.sleep(.05)
+            else:
+                time.sleep(.5)
+
 
     def decimalToEightBit(self, decimal):
         return float(decimal)*255.0/100.0
