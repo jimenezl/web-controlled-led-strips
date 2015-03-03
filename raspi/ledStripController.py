@@ -25,7 +25,7 @@ class ledStripController(object):
 
         self.OFF_DUTY_CYCLE = 0
 
-        self.INCREMENT_STEP = 5 #increment step for fades
+        self.INCREMENT_STEP = 2 #increment step for fades
 
 ##        GPIO.setmode(GPIO.BOARD) #change if necessary
 
@@ -115,6 +115,9 @@ class ledStripController(object):
                         self.turnAllOff()
             else:
                 self.turnAllOff()
+
+            if not(self.strobeOn) or self.fadeState!=0:
+                time.sleep(.5)
 
     def decimalToEightBit(self, decimal):
         return float(decimal)*255.0/100.0
