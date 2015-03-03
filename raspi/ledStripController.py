@@ -99,9 +99,9 @@ class ledStripController(object):
                     self.setBrightness(self.GREEN_PIN, float(self.reportedGreenLevel))
                     self.setBrightness(self.RED_PIN, float(self.reportedRedLevel))
                 else:
-                    if ((self.currentTime - self.fadeTime)<(4.0/float((self.fadeSpeed + 1.0)))):
+                    if ((self.currentTime - self.fadeTime)<(float(100 - self.fadeSpeed + 1.0)/20)):
                         pass
-                    elif ((self.currentTime - self.fadeTime)>(4.0/float((self.fadeSpeed + 1.0)))):
+                    elif ((self.currentTime - self.fadeTime)>(float(100 - self.fadeSpeed + 1.0)/20)):
                         self.fade(self.userSetting)
                         self.turnAllOn()
                         self.fadeTime = self.currentTime
@@ -109,7 +109,7 @@ class ledStripController(object):
                 if self.strobeOn:
                     if (self.currentTime - self.strobeTime)<(.5/float(self.STROBE_FREQUENCY*(self.strobeSpeed + 1.0))):
                         self.turnAllOn()
-                    elif (self.currentTime - self.strobeTime)>(1.0/float(self.STROBE_FREQUENCY*(self.strobeSpeed + 1.0))):
+                    elif (self.currentTime - self.strobeTime)>(.5/float(self.STROBE_FREQUENCY*(self.strobeSpeed + 1.0))):
                         self.strobeTime = self.currentTime
                     else:
                         self.turnAllOff()
