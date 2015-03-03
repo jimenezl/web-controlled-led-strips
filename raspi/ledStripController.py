@@ -116,8 +116,10 @@ class ledStripController(object):
             else:
                 self.turnAllOff()
 
-            if not(self.strobeOn) or self.fadeState!=0:
+            if not(self.strobeOn) or self.fadeState==0:
                 time.sleep(.5)
+            else:
+                time.sleep(.05)
 
     def decimalToEightBit(self, decimal):
         return float(decimal)*255.0/100.0
